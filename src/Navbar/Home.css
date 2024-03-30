@@ -1,0 +1,36 @@
+/* Ensure the container can hold the full width of the text */
+.home-welcome {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
+    font-weight: bold;
+    height: 20vh; /* Adjust the height as needed */
+    background-color: white; /* A dark background color */
+    color: #3498db; /* Text color that stands out against the background */
+    margin-top: 50px;
+  }
+  
+  /* The main heading that will have the typing effect */
+  .Landingpage_heading {
+    overflow: hidden; /* Hide the text as it "types" */
+    border-right: .1em solid white; /* The cursor */
+    white-space: nowrap; /* Keep the text in a single line */
+    margin: 0 auto; /* Center the heading */
+    letter-spacing: .15em; /* Adjust spacing between letters */
+    animation: 
+      typing 3.5s steps(40, end) forwards, /* Typing effect */
+      blink-caret .75s step-end infinite; /* Cursor effect */
+  }
+  
+  /* Typing keyframes */
+  @keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+  }
+  
+  /* Cursor keyframes */
+  @keyframes blink-caret {
+    50% { border-color: transparent; }
+  }
+  
