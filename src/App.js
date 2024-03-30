@@ -3,9 +3,9 @@ import './App.css';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Navbar from './Navbar/Navbar';
 import Products from './Navbar/Products';
-import Workout from './Navbar/Workout';
+import Workout from './Navbar/Workout/Workout';
 import Tracker from './Navbar/Tracker';
-import Recipes from './Navbar/Recipes';
+import Recipes from './Navbar/Recipes/Recipes';
 import Chat from './Navbar/Chat';
 import Home from './Navbar/Home';
 

@@ -7,7 +7,7 @@ function Recipes() {
   const APP_KEY = 'fb37a19a3eb7a00a13c023a46c763000';
   const [recipes, setRecipes] = useState([]);
   const [search, setSearch] = useState('');
-  const [query, setQuery] = useState('salad'); // Default search term
+  const [query, setQuery] = useState(''); // Default search term
 
   useEffect(() => {
     const getRecipes = async () => {
@@ -33,6 +33,9 @@ function Recipes() {
 
   return (
     <div className="container mx-auto mt-10">
+      <h1 className="flex flex-col justify-center items-center mt-4 text-sky-600 font-bold text-3xl"> 
+                Recipes
+            </h1> 
       <form onSubmit={getSearch} className="flex items-center justify-center mb-4">
         <input
           className="flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
