@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Navbar from './Navbar/Navbar';
-import Products from './Navbar/Products';
+import Products from './Navbar/Products/Products';
 import Workout from './Navbar/Workout/Workout';
 import Tracker from './Navbar/Tracker/Tracker';
 import Recipes from './Navbar/Recipes/Recipes';
@@ -14,6 +14,7 @@ function App() {
     <Router>
       <div>
         <Navbar />
+        <Home />
         <Routes>
           <Route path="/Home" element={<Home />} />
           <Route path="/Products" element={<Products />} />

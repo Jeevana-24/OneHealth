@@ -22,7 +22,7 @@ function Navbar() {
           <Link to="/Tracker">Tracker</Link>
         </li>
         <li>
-          <Link to="/Chat">Chat with Us</Link>
+          <Link to="/Chat">Support</Link>
         </li>
       </ul>
     </nav>
