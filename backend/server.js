@@ -1,12 +1,23 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-
+const path = require('path'); 
 const app = express();
+
+app.use('/public', express.static(path.join(__dirname, 'public')));
+
+
 
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Serve static assets from the "public" folder
+//app.use('/public', express.static(path.join(__dirname, 'public')));
+//app.use('/public', express.static(path.join(__dirname, 'public')));
+
+
+
 
 // Connect to MongoDB
 mongoose.connect("mongodb+srv://Jeevana-24:Jeevu%40242@cluster0.nuhvlaf.mongodb.net/Healthwrap", {
@@ -56,6 +67,8 @@ app.post('/courses', async (req, res) => {
     }
   });
   
+
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
 // Start the server
 const PORT = process.env.PORT || 5000;

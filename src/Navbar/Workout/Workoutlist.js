@@ -19,7 +19,6 @@ export default function Workoutlist() {
 
 	useEffect(() => { 
 		setOverallProgress(findOverallProgress(dsaList)); 
-		console.log(dsaList);
 	}, [dsaList]); 
 
 	const updateList = (index, indexOfSub) => { 

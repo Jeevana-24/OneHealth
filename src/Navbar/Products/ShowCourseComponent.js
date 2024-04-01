@@ -1,7 +1,6 @@
 import React from 'react';
 
 function ShowCourseComponent({ products, addCourseToCartFunction }) {
-  console.log('Products:', products);
   if (!products) {
     return <p>Loading...</p>;
   }

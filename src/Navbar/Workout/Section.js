@@ -4,7 +4,6 @@ import SubSection from "./SubSection";
 
 export default function Section({ section, index, updateList }) { 
 	const [open, setOpen] = useState(false); 
-	console.log(updateList);
 	return ( 
 		<div 
 			className="bg-gray-200 px-10 py-6 w-full 

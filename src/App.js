@@ -14,7 +14,6 @@ function App() {
     <Router>
       <div>
         <Navbar />
-        <Home />
         <Routes>
           <Route path="/Home" element={<Home />} />
           <Route path="/Products" element={<Products />} />
