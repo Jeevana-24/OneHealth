@@ -1,16 +1,16 @@
 import React from 'react';
-import Quotes from '../components/Quotes'; // Adjust if the path is not correct
-import './Home.css'; // Make sure this path points to your CSS file for the Home component
+import Quotes from '../components/Quotes';
 
 function Home() {
-    return (
-      <div>
-        <div className="home-welcome">
-          <div className="Landingpage_heading">welcome to Healthwrap</div>
+  return (
+    <div>
+      <div className="flex justify-center items-center h-[20vh] mt-12">
+        <div className="bg-white text-[#3498db] font-bold text-3xl p-4 rounded">
+          <div className="overflow-hidden whitespace-nowrap border-r-[0.1em] border-white animate-typing mx-auto" style={{ maxWidth: '100%' }}>welcome to Healthwrap</div>
         </div>
-        <Quotes />
       </div>
-    );
-  }
-
+      <Quotes />
+    </div>
+  );
+}
 export default Home;
