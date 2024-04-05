@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faEdit,
@@ -10,6 +11,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 const NutritionMeter = () => {
+    const { user, isAuthenticated } = useAuth0();
     const [nutritionItems, setNutritionItems] = useState([]);
     const [newItem, setNewItem] = useState({
         name: "",
@@ -23,6 +25,23 @@ const NutritionMeter = () => {
     const [totalCalories, setTotalCalories] = useState(0);
     const [showWarning, setShowWarning] = useState(false);
     const [inputError, setInputError] = useState(false);
+
+    useEffect(() => {
+        const fetchNutritionData = async () => {
+            if (isAuthenticated && user) {
+                const response = await fetch(`http://localhost:5000/nutrition/${user.sub}`);
+
+                const data = await response.json();
+                if (response.ok) {
+                    setNutritionItems(data.items.map(item => ({ ...item, id: Date.now() + Math.random() }))); // Assign unique IDs for the frontend
+                } else {
+                    console.error("Failed to fetch nutrition data:", data.message);
+                }
+            }
+        };
+
+        fetchNutritionData();
+    }, [user, isAuthenticated]);
 
     useEffect(() => {
         const calculateTotalCalories = nutritionItems.reduce(
@@ -39,7 +58,8 @@ const NutritionMeter = () => {
         }
     }, [nutritionItems]);
 
-    const addNutritionItem = () => {
+    const addNutritionItem = async () => {
+        console.log("Adding item:", newItem);
         if (
             newItem.name &&
             newItem.calories >= 0 &&
@@ -47,33 +67,64 @@ const NutritionMeter = () => {
             newItem.carbs >= 0 &&
             newItem.fat >= 0
         ) {
-            setNutritionItems([
-                ...nutritionItems,
-                { ...newItem, id: Date.now(), quantity: 1 },
-            ]);
-            setNewItem({
-                name: "",
-                calories: "",
-                protein: "",
-                carbs: "",
-                fat: "",
-            });
-            setInputError(false);
+            if (isAuthenticated && user) {
+                const userId = user.sub;
+                const date = new Date().toISOString().split('T')[0]; 
+                const newItemWithId = { ...newItem, id: Date.now(), quantity: 1 };
+    
+                const response = await fetch('http://localhost:5000/nutrition', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ userId, date, items: [newItemWithId] })
+                });
+    
+                if (response.ok) {
+                    setNutritionItems([...nutritionItems, newItemWithId]);
+                    setNewItem({
+                        name: "",
+                        calories: "",
+                        protein: "",
+                        carbs: "",
+                        fat: "",
+                    });
+                    setInputError(false);
+                } else {
+                    const errorData = await response.json();
+                    console.error("Failed to add nutrition item:", errorData.message);
+                }
+            }
         } else {
             setInputError(true);
         }
     };
+    
 
-    const removeAllItems = () => {
-        setNutritionItems([]);
+    const removeAllItems = async () => {
+        if (isAuthenticated && user) {
+            const url = `http://localhost:5000/nutrition/${user.sub}/${new Date().toISOString().split('T')[0]}`;
+
+            console.log("URL for DELETE request:", url);
+            const response = await fetch(url, {
+                method: 'DELETE'
+            });
+    
+            if (response.ok) {
+                setNutritionItems([]);
+            } else {
+                console.error("Failed to clear all items");
+            }
+        }
     };
+    
 
     const editItemFunction = (item) => {
-        setEditItem(item.id);
+        setEditItem(item._id);
         setNewItem({ ...item });
     };
 
-    const updateItemFunction = () => {
+    const updateItemFunction = async () => {
         if (
             newItem.name &&
             newItem.calories >= 0 &&
@@ -81,41 +132,86 @@ const NutritionMeter = () => {
             newItem.carbs >= 0 &&
             newItem.fat >= 0
         ) {
-            const updatedItems = nutritionItems.map((item) =>
-                item.id === newItem.id ? newItem : item
-            );
-            setNutritionItems(updatedItems);
-            setNewItem({
-                name: "",
-                calories: "",
-                protein: "",
-                carbs: "",
-                fat: "",
-            });
-            setEditItem(null);
-            setInputError(false);
+            if (isAuthenticated && user) {
+                const response = await fetch(`http://localhost:5000/nutrition/${user.sub}/${editItem}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(newItem)
+                });
+    
+                if (response.ok) {
+                    const updatedItems = nutritionItems.map((item) =>
+                        item._id === editItem ? { ...newItem, _id: editItem } : item
+                    );
+                    setNutritionItems(updatedItems);
+                    setNewItem({
+                        name: "",
+                        calories: "",
+                        protein: "",
+                        carbs: "",
+                        fat: "",
+                    });
+                    setEditItem(null);
+                    setInputError(false);
+                } else {
+                    console.error("Failed to update nutrition item");
+                }
+            }
         } else {
             setInputError(true);
         }
     };
+    
 
-    const deleteItemFunction = (id) => {
-        const updatedItems = nutritionItems.filter((item) => item.id !== id);
-        setNutritionItems(updatedItems);
+    const deleteItemFunction = async (_id) => {
+        if (isAuthenticated && user) {
+            const response = await fetch(`http://localhost:5000/nutrition/${user.sub}/${_id}`, {
+                method: 'DELETE'
+            });
+    
+            if (response.ok) {
+                const updatedItems = nutritionItems.filter((item) => item._id !== _id);
+                setNutritionItems(updatedItems);
+            } else {
+                console.error("Failed to delete nutrition item");
+            }
+        }
     };
+    
 
     const inputErrorStyle = {
         borderColor: "red",
     };
 
-    const updateItemQuantity = (id, change) => {
+    const updateItemQuantity = async (_id, change) => {
         const updatedItems = nutritionItems.map((item) =>
-            item.id === id
+            item._id === _id
                 ? { ...item, quantity: Math.max(item.quantity + change, 1) }
                 : item
         );
-        setNutritionItems(updatedItems);
+    
+        const updatedItem = updatedItems.find(item => item._id === _id);
+    
+        if (updatedItem && isAuthenticated && user) {
+            const response = await fetch(`http://localhost:5000/nutrition/${user.sub}/item/${_id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedItem)
+            });
+    
+            if (response.ok) {
+                setNutritionItems(updatedItems);
+            } else {
+                console.error("Failed to update item quantity");
+            }
+        }
     };
+    
+    
 
     const totalProtein = () => {
         return nutritionItems.reduce(
@@ -302,7 +398,7 @@ const NutritionMeter = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
                     {nutritionItems.map((item) => (
                         <div
-                            key={item.id}
+                            key={item._id}
                             className="bg-white p-4 rounded-md shadow-md border-2 border-blue-400 hover:border-blue-500 hover:shadow-lg transition transform hover:scale-105"
                         >
                             <h2 className="text-lg font-semibold text-gray-800">
@@ -321,7 +417,7 @@ const NutritionMeter = () => {
                                     <button
                                         className="bg-sky-500 text-white p-1 rounded-md hover:bg-green-600 font-semibold"
                                         onClick={() =>
-                                            updateItemQuantity(item.id, 1)
+                                            updateItemQuantity(item._id, 1)
                                         }
                                     >
                                         <FontAwesomeIcon icon={faPlus} />
@@ -332,7 +428,7 @@ const NutritionMeter = () => {
                                     <button
                                         className="bg-sky-500 text-white p-1 rounded-md hover:bg-red-600 font-semibold"
                                         onClick={() =>
-                                            updateItemQuantity(item.id, -1)
+                                            updateItemQuantity(item._id, -1)
                                         }
                                     >
                                         <FontAwesomeIcon icon={faMinus} />
@@ -348,7 +444,7 @@ const NutritionMeter = () => {
                                 </button>
                                 <button
                                     className="bg-sky-500 text-white py-1 px-2 rounded-md hover:bg-red-600 font-semibold focus:outline-none text-xs"
-                                    onClick={() => deleteItemFunction(item.id)}
+                                    onClick={() => deleteItemFunction(item._id)}
                                 >
                                     <FontAwesomeIcon icon={faTrashAlt} />{" "}
                                     Delete
