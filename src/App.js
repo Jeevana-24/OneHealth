@@ -38,7 +38,6 @@ function App() {
         <Route path="/workout" element={<Workout />} />
         <Route path="/tracker" element={<Tracker />} />
         <Route path="/chat" element={<Chat />} />
-        {/* ... other routes */}
       </Routes>
     </Router>
   );

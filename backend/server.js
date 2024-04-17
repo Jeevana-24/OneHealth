@@ -150,8 +150,6 @@ app.put('/nutrition/:userId/:itemId', async (req, res) => {
 
 
 app.delete('/nutrition/:userId/:itemId', async (req, res) => {
-  const { userId, itemId } = req.params;
-
   try {
       const nutritionEntry = await Nutrition.findOne({ userId });
       if (nutritionEntry) {
@@ -169,14 +167,11 @@ app.delete('/nutrition/:userId/:itemId', async (req, res) => {
 
 
 app.delete('/nutrition/:userId/:date', async (req, res) => {
-  const { userId, date } = req.params;
-  try {
-      await Nutrition.deleteOne({ userId, date });
-      res.status(200).json({ message: 'All items cleared successfully' });
-  } catch (error) {
-      res.status(500).json({ message: error.message });
-  }
+  console.log("Clear all items route called");
+  res.status(200).json({ message: 'Test: All items cleared successfully' });
 });
+
+
 
 
 // Start the server

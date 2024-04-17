@@ -33,7 +33,7 @@ const NutritionMeter = () => {
 
                 const data = await response.json();
                 if (response.ok) {
-                    setNutritionItems(data.items.map(item => ({ ...item, id: Date.now() + Math.random() }))); // Assign unique IDs for the frontend
+                    setNutritionItems(data.items.map(item => ({ ...item, id: Date.now() + Math.random() })));
                 } else {
                     console.error("Failed to fetch nutrition data:", data.message);
                 }
@@ -102,13 +102,15 @@ const NutritionMeter = () => {
     
 
     const removeAllItems = async () => {
+        console.log('hulala');
         if (isAuthenticated && user) {
-            const url = `http://localhost:5000/nutrition/${user.sub}/${new Date().toISOString().split('T')[0]}`;
-
-            console.log("URL for DELETE request:", url);
-            const response = await fetch(url, {
+                        const date = new Date().toISOString().split('T')[0];
+                        console.log(user.sub,date);
+            const response = await fetch(`http://localhost:5000/nutrition/${user.sub}/${date}`, {
                 method: 'DELETE'
             });
+            console.log(response)
+
     
             if (response.ok) {
                 setNutritionItems([]);
@@ -117,6 +119,7 @@ const NutritionMeter = () => {
             }
         }
     };
+    
     
 
     const editItemFunction = (item) => {
@@ -170,7 +173,6 @@ const NutritionMeter = () => {
             const response = await fetch(`http://localhost:5000/nutrition/${user.sub}/${_id}`, {
                 method: 'DELETE'
             });
-    
             if (response.ok) {
                 const updatedItems = nutritionItems.filter((item) => item._id !== _id);
                 setNutritionItems(updatedItems);
@@ -180,6 +182,7 @@ const NutritionMeter = () => {
         }
     };
     
+    
 
     const inputErrorStyle = {
         borderColor: "red",
@@ -187,9 +190,7 @@ const NutritionMeter = () => {
 
     const updateItemQuantity = async (_id, change) => {
         const updatedItems = nutritionItems.map((item) =>
-            item._id === _id
-                ? { ...item, quantity: Math.max(item.quantity + change, 1) }
-                : item
+            item._id === _id ? { ...item, quantity: Math.max(item.quantity + change, 1) } : item
         );
     
         const updatedItem = updatedItems.find(item => item._id === _id);
@@ -200,7 +201,7 @@ const NutritionMeter = () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(updatedItem)
+                body: JSON.stringify({ quantity: updatedItem.quantity })
             });
     
             if (response.ok) {
@@ -210,6 +211,7 @@ const NutritionMeter = () => {
             }
         }
     };
+    
     
     
 
@@ -446,7 +448,7 @@ const NutritionMeter = () => {
                                     className="bg-sky-500 text-white py-1 px-2 rounded-md hover:bg-red-600 font-semibold focus:outline-none text-xs"
                                     onClick={() => deleteItemFunction(item._id)}
                                 >
-                                    <FontAwesomeIcon icon={faTrashAlt} />{" "}
+                                    <FontAwesomeIcon icon={faTrashAlt} />
                                     Delete
                                 </button>
                             </div>
