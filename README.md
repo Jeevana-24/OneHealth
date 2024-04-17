@@ -1,4 +1,5 @@
 # HealthWrap
+(still working...)
 
 HealthWrap is a full-stack application designed to provide comprehensive health and wellness resources. It includes features like user authentication, product listings, recipe suggestions, workout tracking, and support services. This application is built using React, MongoDB, and Node.js.
 
@@ -31,7 +32,7 @@ Once the application is running, open your web browser and go to `http://localho
 ![HealthWrap Logo](login.png)
 ![HealthWrap Logo](home.png)
 ![HealthWrap Logo](product.png)
-![HealthWrap Logo](Reciepes.png)
+![HealthWrap Logo](desserts.png)
 ![HealthWrap Logo](workout.png)
 ![HealthWrap Logo](calorie.png)
 ![HealthWrap Logo](support.png)
