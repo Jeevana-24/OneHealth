@@ -28,7 +28,14 @@ To set up the project locally, follow these steps:
 Once the application is running, open your web browser and go to `http://localhost:3000` to view the app.
 
 ## Screenshots 
+![HealthWrap Logo](login.png)
 ![HealthWrap Logo](home.png)
+![HealthWrap Logo](product.png)
+![HealthWrap Logo](Reciepes.png)
+![HealthWrap Logo](workout.png)
+![HealthWrap Logo](tracker.png)
+![HealthWrap Logo](support.png)
+
 
 
 ## Contributing
