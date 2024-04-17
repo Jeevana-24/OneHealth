@@ -33,7 +33,7 @@ Once the application is running, open your web browser and go to `http://localho
 ![HealthWrap Logo](product.png)
 ![HealthWrap Logo](Reciepes.png)
 ![HealthWrap Logo](workout.png)
-![HealthWrap Logo](tracker.png)
+![HealthWrap Logo](calorie.png)
 ![HealthWrap Logo](support.png)
 
 
