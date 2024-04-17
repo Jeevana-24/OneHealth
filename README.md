@@ -27,6 +27,10 @@ To set up the project locally, follow these steps:
 
 Once the application is running, open your web browser and go to `http://localhost:3000` to view the app.
 
+## Screenshots 
+![HealthWrap Logo](home.png)
+
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit pull requests or create issues for bugs and feature requests.
